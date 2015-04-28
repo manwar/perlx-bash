@@ -1,4 +1,4 @@
-package perlx::bash;
+package PerlX::bash;
 
 use strict;
 use warnings;
