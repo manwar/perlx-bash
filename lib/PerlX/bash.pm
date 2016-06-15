@@ -8,7 +8,7 @@ use warnings;
 
 1;
 
-# ABSTRACT:
+# ABSTRACT: tighter integration between Perl and bash
 # COPYRIGHT
 
 __END__
