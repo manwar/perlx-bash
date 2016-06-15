@@ -15,7 +15,27 @@ use IPC::System::Simple qw< run capture EXIT_ANY $EXITVAL >;
 
 sub bash
 {
-	run [0..125], qw< bash -c >, shift;
+	my @opts;
+	my $exit_codes = [0..125];
+
+	while ( $_[0] =~ /^-/)
+	{
+		my $arg = shift;
+		if ($arg eq '-e')
+		{
+			$exit_codes = [0];
+		}
+		else
+		{
+			push @opts, $arg;
+		}
+	}
+
+	my @cmd = 'bash';
+	push @cmd, @opts;
+	push @cmd, '-c';
+
+	run $exit_codes, @cmd, shift;
 	return
 		BOOL	{	$EXITVAL == 0	}
 		SCALAR	{	$EXITVAL		}
