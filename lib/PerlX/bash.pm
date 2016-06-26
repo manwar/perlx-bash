@@ -5,6 +5,8 @@ use warnings;
 
 use Exporter 'import';
 our @EXPORT = ('bash');
+our @EXPORT_OK = (@EXPORT, 'pwd');
+our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 
 # VERSION
 
@@ -72,6 +74,10 @@ sub bash
 		;
 	}
 }
+
+
+use Cwd ();
+*pwd = \&Cwd::cwd;
 
 
 1;
