@@ -54,11 +54,13 @@ sub bash
 		}
 		elsif ($capture eq 'lines')
 		{
-			return split("\n", $output);
+			my @lines = split("\n", $output);
+			return wantarray ? @lines : $lines[0];
 		}
 		elsif ($capture eq 'words')
 		{
-			return split(/[$IFS]+/, $output);
+			my @words = split(/[$IFS]+/, $output);
+			return wantarray ? @words : $words[0];
 		}
 		else
 		{
