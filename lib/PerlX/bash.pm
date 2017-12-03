@@ -108,4 +108,31 @@ use Cwd ();
 # This module is similar to the solution presented here:
 # http://stackoverflow.com/questions/571368/how-can-i-use-bash-syntax-in-perls-system
 
+
+=head1 SYNOPSIS
+
+	# put all instances of Firefox to sleep
+	foreach (bash \lines => "pgrep firefox")
+	{
+		bash "kill -STOP $_" or die("can't spawn `kill`!");
+	}
+
+	# count lines in $file
+	local $@;
+	eval { bash \string => -e => "wc -l $file" };
+	die("can't spawn `wc`!") if $@;
+
+	# can capture actual exit status
+	my $status = bash "grep -e $pattern $file >$tmpfile";
+	die("`grep` had an error!") if $status == 2;
+
+=head1 STATUS
+
+This module is an experiment.  It's fun to play around with, and I welcome suggestions and
+contributions.  However, don't rely on this in production code (yet).
+
+Further documentation will be forthcoming, hopefully soon.
+
+=cut
+
 __END__
