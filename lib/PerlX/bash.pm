@@ -86,5 +86,8 @@ use Cwd ();
 
 # ABSTRACT: tighter integration between Perl and bash
 # COPYRIGHT
+#
+# This module is similar to the solution presented here:
+# http://stackoverflow.com/questions/571368/how-can-i-use-bash-syntax-in-perls-system
 
 __END__
