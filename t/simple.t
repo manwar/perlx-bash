@@ -28,6 +28,15 @@ is $success, 'success', 'one-line spawn with successful exit (boolean context)';
 is $failure, 'failure', 'one-line spawn with failed exit (boolean context)';
 
 
+# now try multiple arguments: they should just get concatenated together with spaces and run
+
+open(STDIN, '<', File::Spec->devnull);				# because otherwise, if our args get lost, `perl` will hang forever
+$status = bash $^X, "-e 'exit 66'";
+is $status, 66, "two args cat'ed with space (fore)";
+$status = bash "$^X -e", "'exit 67'";
+is $status, 67, "two args cat'ed with space (aft)";
+
+
 # now let's make sure that we're really running bash
 # `cd` is a nice builtin command to test
 # unlike, say, `echo`, there's no corresponding external command

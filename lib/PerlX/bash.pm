@@ -12,7 +12,22 @@ our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 
 
 use Contextual::Return;
+use Scalar::Util qw< blessed >;
 use IPC::System::Simple qw< run capture EXIT_ANY $EXITVAL >;
+
+
+sub _process_bash_arg ()
+{
+	# incoming arg is in $_
+	my $arg = $_;				# make a copy
+	if (blessed $arg and $arg->can('basename'))
+	{
+		$arg = "$arg";			# stringify
+		$arg =~ s/'/'\\''/g;	# handle internal single quotes
+		$arg = "'$arg'";		# quote with single quotes
+	}
+	return $arg;
+}
 
 
 sub bash
@@ -42,12 +57,15 @@ sub bash
 	push @cmd, @opts;
 	push @cmd, '-c';
 
+	my $bash_cmd = join(' ', map { _process_bash_arg } @_);
+	push @cmd, $bash_cmd;
+
 	if ($capture)
 	{
 		my $IFS = $ENV{IFS};
 		$IFS = " \t\n" unless defined $IFS;
 
-		my $output = capture [0..125], qw< bash -c >, shift;
+		my $output = capture [0..125], qw< bash -c >, $bash_cmd;
 		if ($capture eq 'string')
 		{
 			return $output;
@@ -69,7 +87,7 @@ sub bash
 	}
 	else
 	{
-		run $exit_codes, @cmd, shift;
+		run $exit_codes, @cmd;
 		return
 			BOOL	{	$EXITVAL == 0	}
 			SCALAR	{	$EXITVAL		}
